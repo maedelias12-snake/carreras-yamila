@@ -34,6 +34,31 @@
   .box h3{margin:0 0 8px;font-size:1.05rem}
   .box ul{margin:0;padding-left:18px}
   footer{color:var(--muted);font-size:.8rem;text-align:center;margin-top:30px}
+  .quizbtn{display:block;width:100%;border:0;cursor:pointer;background:var(--acc);color:#fff;font-size:1.05rem;font-weight:700;padding:14px;border-radius:12px;margin-bottom:22px}
+  .quizbtn:hover{background:#24584a}
+  #quiz{display:none;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;margin-bottom:24px}
+  .prog{height:6px;background:var(--line);border-radius:9px;margin:6px 0 18px;overflow:hidden}
+  .prog div{height:100%;background:var(--acc);width:0;transition:width .25s}
+  .q{font-size:1.1rem;font-weight:600;margin:0 0 14px}
+  .opt{display:block;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:10px;padding:11px 14px;margin:8px 0;font:inherit;color:var(--txt);cursor:pointer}
+  .opt:hover{border-color:var(--acc);background:var(--accbg)}
+  .qnav{display:flex;justify-content:space-between;margin-top:12px;color:var(--muted);font-size:.9rem}
+  .qnav button{background:none;border:0;color:var(--acc);cursor:pointer;font:inherit}
+  .res{margin:12px 0}
+  .res .bar{height:10px;background:var(--line);border-radius:9px;overflow:hidden;margin:4px 0 2px}
+  .res .bar div{height:100%;background:var(--acc)}
+  .res a{color:var(--acc);font-size:.9rem}
+  .top{background:var(--accbg);border-radius:10px;padding:12px 14px;margin:6px 0 14px}
+  .lik{display:flex;flex-direction:column;gap:6px}
+  .hint{background:var(--warnbg);color:var(--warn);border-radius:8px;padding:6px 10px;font-size:.85rem;margin:0 0 12px;display:inline-block}
+  .intro p{margin:6px 0}
+  .riasec{display:grid;grid-template-columns:110px 1fr 40px;gap:6px 10px;align-items:center;font-size:.9rem;margin:10px 0 18px}
+  .riasec .bar{height:10px;background:var(--line);border-radius:9px;overflow:hidden}
+  .riasec .bar div{height:100%;background:var(--acc)}
+  .cr{border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:8px 0}
+  .cr h4{margin:0 0 4px;font-size:1rem}
+  .cr small{color:var(--muted);display:block;margin-bottom:4px}
+  .cr a{color:var(--acc);font-size:.9rem;margin-right:12px}
 </style>
 </head>
 <body>
@@ -41,6 +66,8 @@
   <h1>Carreras para Yamila! ✨</h1>
   <p class="sub">Carreras cortas (2–3 años), con buena salida laboral, poca matemática y cerca de casa o virtuales.</p>
 
+  <button class="quizbtn" onclick="startQuiz()">🧭 Test Vocacional · ¿no sabés qué estudiar? Empezá acá (6 min)</button>
+  <div id="quiz"></div>
   <div class="rank">
     <a href="#hys" target="_self">1 · Higiene y Seguridad ⭐</a>
     <a href="#comex" target="_self">2 · Comercio Internacional</a>
@@ -153,5 +180,70 @@
 
   <footer>Sueldos: pretensiones salariales por rubro publicadas en 2026 (iProfesional / Diario Jornada). Verificar datos en cada institución.</footer>
 </div>
+<script>
+/* Test basado en el modelo RIASEC de Holland (intereses), adaptado a carreras cortas */
+var T={R:"Práctico",I:"Analítico",A:"Creativo",S:"Social",E:"Emprendedor",C:"Organizado"};
+var TD={R:"Te gusta hacer cosas concretas, con las manos, en movimiento y viendo resultados reales.",I:"Te gusta entender cómo funcionan las cosas, investigar y resolver problemas.",A:"Te gusta crear, diseñar y expresarte; buscás trabajos con libertad y algo de estética.",S:"Te gusta ayudar, enseñar y cuidar a otras personas.",E:"Te gusta convencer, vender, liderar y tomar decisiones.",C:"Te gusta el orden, los datos, los procedimientos claros y que todo esté en regla."};
+var L=[["R","Arreglar cosas de la casa (un enchufe, una canilla, un mueble)"],["I","Mirar documentales o leer sobre cómo funciona el cuerpo, la naturaleza o la tecnología"],["A","Decorar, combinar ropa o elegir colores para algo"],["S","Que tus amigos te busquen para contarte sus problemas"],["E","Convencer a otros de hacer un plan o de comprar algo"],["C","Tener tus cosas, papeles o archivos ordenados y clasificados"],
+["R","Trabajar al aire libre o en un lugar con movimiento (obra, fábrica, depósito)"],["I","Resolver acertijos, juegos de lógica o descubrir por qué algo falla"],["A","Dibujar, sacar fotos, editar videos o hacer manualidades"],["S","Cuidar a alguien enfermo, a un abuelo o a un chico"],["E","Organizar un evento y ponerte al frente"],["C","Llevar las cuentas de la casa o un control de gastos"],
+["R","Usar herramientas o máquinas"],["I","Hacer análisis o comparar datos para sacar conclusiones"],["A","Inventar algo nuevo en vez de seguir instrucciones"],["S","Explicarle algo a alguien con paciencia hasta que lo entienda"],["E","Tener tu propio negocio o emprendimiento algún día"],["C","Completar formularios y trámites sin errores"],
+["R","Ver un resultado físico de tu trabajo (algo armado, ordenado, arreglado)"],["I","Trabajar en un laboratorio o con equipos técnicos"],["A","Cocinar platos nuevos o presentar algo de forma linda"],["S","Trabajar en equipo con mucha gente"],["E","Negociar un precio o un acuerdo"],["C","Seguir un procedimiento paso a paso al pie de la letra"],
+["R","Trabajar más con cosas que con personas"],["I","Aprender algo técnico aunque sea difícil"],["A","Trabajos donde puedas expresar tu estilo"],["S","Que tu trabajo tenga un impacto en la vida de alguien"],["E","Tener gente a cargo y tomar decisiones"],["C","Trabajar con computadora: planillas, sistemas, bases de datos"]];
+var F=[["math","¿Cómo te llevás con la matemática?",[["La evito todo lo que puedo",0],["Lo básico lo manejo bien",1],["No tengo problema, hasta me gusta",2]]],
+["blood","¿Te impresionan la sangre, las heridas o los hospitales?",[["Sí, no lo soporto",0],["Un poco, pero lo banco",1],["Para nada",2]]],
+["mode","¿Cómo preferís estudiar?",[["Virtual, a mi ritmo",0],["Presencial",1],["Me da igual",2]]],
+["money","¿Podés pagar una cuota mensual?",[["No, necesito que sea gratis",0],["Algo puedo pagar si vale la pena",1]]]];
+/* carreras: tipos, mat(0-2), sangre, virtual, gratis disponible, años, salida, anchor */
+var K=[
+{n:"Higiene y Seguridad en el Trabajo",t:{R:1,C:.6,S:.3},m:1,v:1,g:1,y:"3 años",s:"Muy alta: obligatoria por ley en toda empresa",a:"hys"},
+{n:"Comercio Internacional / Despacho Aduanero",t:{C:1,E:.6},m:0,v:1,g:1,y:"3 años",s:"Alta, buenos sueldos",a:"comex"},
+{n:"Logística",t:{E:.8,C:.8,R:.5},m:1,v:1,g:0,y:"2 años",s:"Alta, crece con el e-commerce",a:"log"},
+{n:"Enfermería",t:{S:1,R:.4,I:.3},m:0,b:1,v:0,g:1,y:"3 años",s:"Altísima, falta gente",a:"enf"},
+{n:"Programación / Ciberseguridad",t:{I:1,C:.5,R:.3},m:2,v:1,g:0,y:"2 años",s:"Alta y bien paga, pero exigente",a:"prog"},
+{n:"Acompañamiento Terapéutico",t:{S:1,A:.3},m:0,v:1,g:1,y:"2-3 años",s:"Buena, en salud mental y discapacidad",q:"tecnicatura acompañamiento terapéutico gratuita CABA"},
+{n:"Diagnóstico por Imágenes (Radiología)",t:{I:.8,R:.7,S:.5},m:1,b:1,v:0,g:1,y:"3 años",s:"Muy alta en clínicas y hospitales",q:"tecnicatura diagnóstico por imágenes gratuita CABA zona sur"},
+{n:"Instrumentación Quirúrgica",t:{R:.7,S:.7,C:.5},m:0,b:1,v:0,g:1,y:"3 años",s:"Alta, en quirófanos",q:"tecnicatura instrumentación quirúrgica gratuita Buenos Aires"},
+{n:"Análisis Clínicos / Laboratorio",t:{I:1,C:.6,R:.4},m:1,b:1,v:0,g:1,y:"3 años",s:"Buena, en laboratorios",q:"tecnicatura laboratorio análisis clínicos gratuita CABA"},
+{n:"Recursos Humanos",t:{S:.8,E:.7,C:.6},m:0,v:1,g:1,y:"2-3 años",s:"Buena, en cualquier empresa",q:"tecnicatura recursos humanos gratuita a distancia"},
+{n:"Administración / Gestión Contable",t:{C:1,E:.4},m:1,v:1,g:1,y:"2-3 años",s:"Buena y estable, en todo tipo de empresa",q:"tecnicatura administración contable gratuita CABA a distancia"},
+{n:"Marketing Digital / Comercialización",t:{E:1,A:.6,C:.3},m:0,v:1,g:1,y:"2-3 años",s:"Alta, se puede trabajar remoto o freelance",q:"tecnicatura marketing comercialización gratuita CABA"},
+{n:"Turismo y Hotelería",t:{E:.8,S:.7,A:.3},m:0,v:1,g:1,y:"3 años",s:"Media, depende de temporada; ideal si te gusta atender gente",q:"tecnicatura turismo hotelería gratuita CABA"},
+{n:"Diseño Gráfico / Multimedia",t:{A:1,I:.3,E:.3},m:0,v:1,g:1,y:"2-3 años",s:"Media, mucha competencia; bueno como freelance",q:"tecnicatura diseño gráfico gratuita CABA"},
+{n:"Gastronomía / Cocina Profesional",t:{A:.8,R:.8,E:.4},m:0,v:0,g:1,y:"2 años",s:"Alta, pero horarios pesados",q:"tecnicatura gastronomía gratuita CABA zona sur"},
+{n:"Instalaciones Eléctricas / Electricidad",t:{R:1,I:.4},m:2,v:0,g:1,y:"2-3 años",s:"Muy alta, se puede trabajar por cuenta propia",q:"tecnicatura superior electricidad instalaciones gratuita Buenos Aires"},
+{n:"Martillero y Corredor Público (inmobiliario)",t:{E:1,C:.6},m:0,v:1,g:1,y:"2-3 años",s:"Buena; ingresos por comisión",q:"martillero corredor público carrera universidad pública"},
+{n:"Seguros (Productor Asesor)",t:{E:.8,C:.8},m:1,v:1,g:0,y:"1-2 años",s:"Buena; ingresos por comisión y cartera",q:"curso productor asesor de seguros SSN"}];
+var st,ix,A,R2,FV;
+function startQuiz(){st=0;ix=0;A={R:0,I:0,A:0,S:0,E:0,C:0};FV={};var z=document.getElementById('quiz');z.style.display='block';z.scrollIntoView({behavior:'smooth'});intro();}
+function closeQuiz(){document.getElementById('quiz').style.display='none';}
+function head(n,tot){return '<div class="qnav"><span>'+(n?('Pregunta '+n+' de '+tot):'Test vocacional')+'</span><button onclick="closeQuiz()">✕ cerrar</button></div>'+(n?'<div class="prog"><div style="width:'+((n-1)/tot*100)+'%"></div></div>':'');}
+function intro(){document.getElementById('quiz').innerHTML=head()+'<div class="intro"><p class="q">¿Cómo funciona?</p><p>Son <b>34 preguntas</b> cortas (unos 6 minutos). Está basado en el modelo <b>RIASEC de Holland</b>, uno de los más usados en orientación vocacional.</p><p>✔ En cada pregunta elegí <b>una sola opción</b>.</p><p>✔ No hay respuestas correctas: contestá lo que te sale, no lo que "debería" gustarte.</p><p>✔ Pensá en lo que <b>disfrutás</b>, no en lo que sabés hacer.</p></div><button class="opt" style="text-align:center;font-weight:600" onclick="showL()">Empezar →</button>';}
+var TOT=30+4;
+function showL(){var it=L[ix];var o=[["Me encanta",4],["Me gusta",3],["Me da igual",2],["No me gusta",1],["Lo odio",0]];
+var h=head(ix+1,TOT)+'<span class="hint">Elegí una sola opción</span><p class="q">¿Cuánto te gusta…? <br>'+it[1]+'</p><div class="lik">';
+o.forEach(function(x){h+='<button class="opt" onclick="pickL('+x[1]+')">'+x[0]+'</button>';});
+h+='</div>'+(ix>0?'<div class="qnav"><button onclick="back()">← volver</button><span></span></div>':'');document.getElementById('quiz').innerHTML=h;}
+var hist=[];
+function pickL(v){A[L[ix][0]]+=v;hist.push(v);ix++;ix<L.length?showL():(ix=0,showF());}
+function back(){ix--;A[L[ix][0]]-=hist.pop();showL();}
+function showF(){var f=F[ix];var h=head(L.length+ix+1,TOT)+'<span class="hint">Elegí una sola opción · estas preguntas ajustan el resultado</span><p class="q">'+f[1]+'</p>';
+f[2].forEach(function(o){h+='<button class="opt" onclick="pickF('+o[1]+')">'+o[0]+'</button>';});document.getElementById('quiz').innerHTML=h;}
+function pickF(v){FV[F[ix][0]]=v;ix++;ix<F.length?showF():result();}
+function result(){var P={};for(var k in A)P[k]=Math.round(A[k]/20*100);
+var ord=Object.keys(P).sort(function(a,b){return P[b]-P[a];});
+var sc=K.map(function(c){var s=0,w=0;for(var t in c.t){s+=c.t[t]*P[t];w+=c.t[t];}s=s/w;var nota=[];
+if(FV.math===0&&c.m===2){s-=30;nota.push("pide bastante matemática");}else if(FV.math===0&&c.m===1)s-=5;else if(FV.math===2&&c.m===2)s+=5;
+if(c.b&&FV.blood===0){s-=60;}else if(c.b&&FV.blood===1)s-=8;
+if(FV.mode===0&&!c.v){s-=10;nota.push("se cursa presencial");}if(FV.mode===0&&c.v)s+=4;
+if(FV.money===0&&!c.g){s-=10;nota.push("suele ser paga (UTN)");}
+return {c:c,s:Math.max(0,Math.min(100,Math.round(s))),nota:nota};}).filter(function(x){return !(x.c.b&&FV.blood===0);}).sort(function(a,b){return b.s-a.s;});
+var h=head()+'<p class="q">🎉 ¡Listo! Este es tu perfil</p><div class="top">Sos principalmente <b>'+T[ord[0]]+'</b> y <b>'+T[ord[1]]+'</b>.<br><small>'+TD[ord[0]]+' '+TD[ord[1]]+'</small></div><div class="riasec">';
+ord.forEach(function(k){h+='<span>'+T[k]+'</span><div class="bar"><div style="width:'+P[k]+'%"></div></div><span>'+P[k]+'%</span>';});
+h+='</div><p class="q">Carreras cortas que más te van (top 6)</p>';
+sc.slice(0,6).forEach(function(x,i){var c=x.c,lk=c.a?'<a href="#'+c.a+'" target="_self">Ver detalle y dónde estudiar ↓</a>':'<a href="https://www.google.com/search?q='+encodeURIComponent(c.q)+'">Buscar dónde estudiarla ↗</a>';
+h+='<div class="cr"><h4>'+(i+1)+'. '+c.n+' · '+x.s+'% afinidad</h4><small>⏱ '+c.y+' · Matemática: '+["poca","media","bastante"][c.m]+(c.b?' · trabajo con pacientes/sangre':'')+' · Salida laboral: '+c.s+'</small>'+(x.nota.length?'<small>⚠️ Ojo: '+x.nota.join(", ")+'</small>':'')+lk+'</div>';});
+h+='<p style="color:var(--muted);font-size:.85rem">Esto es una orientación, no una decisión final. Lo ideal: mirá las 2 o 3 primeras, buscá videos de "un día trabajando de…" y, si podés, andá a una charla informativa. Si ninguna te convence, también está bien: hacelo de nuevo otro día o consultá un servicio de orientación vocacional gratuito (la UBA y varias universidades públicas tienen).</p><button class="opt" style="text-align:center" onclick="startQuiz()">↺ Hacerlo de nuevo</button>';
+document.getElementById('quiz').innerHTML=h;}
+</script>
 </body>
 </html>
